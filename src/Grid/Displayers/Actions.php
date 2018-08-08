@@ -128,13 +128,18 @@ class Actions extends AbstractDisplayer
         $actions = $this->prepends;
 
         foreach ($this->actions as $action) {
-            $method = 'render'.ucfirst($action);
+            /**
+             * renderView(); renderEdit(); renderShow();
+             */
+            $method = 'render' . ucfirst($action);
             array_push($actions, $this->{$method}());
         }
 
         $actions = array_merge($actions, $this->appends);
 
-        return implode('', $actions);
+        return view('admin::actions.container', [
+            'actions' => $actions
+        ])->render();
     }
 
     /**
@@ -144,11 +149,9 @@ class Actions extends AbstractDisplayer
      */
     protected function renderView()
     {
-        return <<<EOT
-<a href="{$this->getResource()}/{$this->getKey()}">
-    <i class="fa fa-eye"></i>
-</a>
-EOT;
+        return view('admin::actions.view', [
+            'href' => $this->getResource() . '/' . $this->getKey()
+        ])->render();
     }
 
     /**
@@ -158,11 +161,9 @@ EOT;
      */
     protected function renderEdit()
     {
-        return <<<EOT
-<a href="{$this->getResource()}/{$this->getKey()}/edit">
-    <i class="fa fa-edit"></i>
-</a>
-EOT;
+        return view('admin::actions.edit', [
+            'href' => $this->getResource() . '/' . $this->getKey() . '/edit'
+        ])->render();
     }
 
     /**
@@ -172,56 +173,8 @@ EOT;
      */
     protected function renderDelete()
     {
-        $deleteConfirm = trans('admin.delete_confirm');
-        $confirm = trans('admin.confirm');
-        $cancel = trans('admin.cancel');
-
-        $script = <<<SCRIPT
-
-$('.{$this->grid->getGridRowName()}-delete').unbind('click').click(function() {
-
-    var id = $(this).data('id');
-
-    swal({
-      title: "$deleteConfirm",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#DD6B55",
-      confirmButtonText: "$confirm",
-      closeOnConfirm: false,
-      cancelButtonText: "$cancel"
-    },
-    function(){
-        $.ajax({
-            method: 'post',
-            url: '{$this->getResource()}/' + id,
-            data: {
-                _method:'delete',
-                _token:LA.token,
-            },
-            success: function (data) {
-                $.pjax.reload('#pjax-container');
-
-                if (typeof data === 'object') {
-                    if (data.status) {
-                        swal(data.message, '', 'success');
-                    } else {
-                        swal(data.message, '', 'error');
-                    }
-                }
-            }
-        });
-    });
-});
-
-SCRIPT;
-
-        Admin::script($script);
-
-        return <<<EOT
-<a href="javascript:void(0);" data-id="{$this->getKey()}" class="{$this->grid->getGridRowName()}-delete">
-    <i class="fa fa-trash"></i>
-</a>
-EOT;
+        return view('admin::actions.delete', [
+            'url' => $this->getResource() . '/' . $this->getKey(),
+        ])->render();
     }
 }

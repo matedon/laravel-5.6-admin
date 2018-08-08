@@ -178,7 +178,7 @@ class Grid
      * Create a new grid instance.
      *
      * @param Eloquent $model
-     * @param Closure  $builder
+     * @param Closure $builder
      */
     public function __construct(Eloquent $model, Closure $builder)
     {
@@ -233,7 +233,7 @@ class Grid
      * Get or set option for grid.
      *
      * @param string $key
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return $this|mixed
      */
@@ -277,7 +277,7 @@ class Grid
 
             $label = empty($label) ? ucfirst($relationColumn) : $label;
 
-            $name = snake_case($relationName).'.'.$relationColumn;
+            $name = snake_case($relationName) . '.' . $relationColumn;
         }
 
         $column = $this->addColumn($name, $label);
@@ -662,7 +662,7 @@ class Grid
     /**
      * Get the export url.
      *
-     * @param int  $scope
+     * @param int $scope
      * @param null $args
      *
      * @return string
@@ -675,7 +675,7 @@ class Grid
             $input = array_merge($input, $constraints);
         }
 
-        return $this->resource().'?'.http_build_query($input);
+        return $this->resource() . '?' . http_build_query($input);
     }
 
     /**
@@ -693,7 +693,7 @@ class Grid
 
         return sprintf('%s/create%s',
             $this->resource(),
-            $queryString ? ('?'.$queryString) : ''
+            $queryString ? ('?' . $queryString) : ''
         );
     }
 
@@ -960,6 +960,7 @@ class Grid
             'radio'       => \Encore\Admin\Grid\Displayers\Radio::class,
             'checkbox'    => \Encore\Admin\Grid\Displayers\Checkbox::class,
             'orderable'   => \Encore\Admin\Grid\Displayers\Orderable::class,
+            'dateFormat'  => \Encore\Admin\Grid\Displayers\DateFormat::class,
         ];
 
         foreach ($map as $abstract => $class) {
@@ -997,7 +998,7 @@ class Grid
      * Set a view to render.
      *
      * @param string $view
-     * @param array  $variables
+     * @param array $variables
      */
     public function setView($view, $variables = [])
     {

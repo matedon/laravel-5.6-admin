@@ -15,6 +15,8 @@ class Date extends Text
 
     protected $format = 'YYYY-MM-DD';
 
+    protected $icon = 'fa-calendar';
+
     public function format($format)
     {
         $this->format = $format;
@@ -39,8 +41,7 @@ class Date extends Text
 
         $this->script = "$('{$this->getElementClassSelector()}').parent().datetimepicker(".json_encode($this->options).');';
 
-        $this->prepend('<i class="fa fa-calendar fa-fw"></i>')
-            ->defaultAttribute('style', 'width: 110px');
+        $this->prepend('<i class="fa fa-fw fa-lg ' . $this->icon . '"></i>');
 
         return parent::render();
     }
