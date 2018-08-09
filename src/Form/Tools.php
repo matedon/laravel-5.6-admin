@@ -138,7 +138,7 @@ class Tools implements Renderable
     {
         $key = $this->form->getResourceId();
 
-        return $this->getListPath().'/'.$key;
+        return $this->getListPath() . '/' . $key;
     }
 
     /**
@@ -148,13 +148,10 @@ class Tools implements Renderable
      */
     protected function renderList()
     {
-        $text = trans('admin.list');
-
-        return <<<EOT
-<div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getListPath()}" class="btn btn-sm btn-default"><i class="fa fa-list"></i>&nbsp;$text</a>
-</div>
-EOT;
+        return view('admin::actions.list', [
+            'label' => true,
+            'href'  => $this->getListPath()
+        ])->render();
     }
 
     /**
@@ -164,15 +161,10 @@ EOT;
      */
     protected function renderView()
     {
-        $view = trans('admin.view');
-
-        return <<<HTML
-<div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="{$this->getViewPath()}" class="btn btn-sm btn-primary">
-        <i class="fa fa-eye"></i> {$view}
-    </a>
-</div>
-HTML;
+        return view('admin::actions.view', [
+            'label' => true,
+            'href'  => $this->getViewPath()
+        ])->render();
     }
 
     /**
@@ -182,61 +174,12 @@ HTML;
      */
     protected function renderDelete()
     {
-        $deleteConfirm = trans('admin.delete_confirm');
-        $confirm = trans('admin.confirm');
-        $cancel = trans('admin.cancel');
-
-        $class = uniqid();
-
-        $script = <<<SCRIPT
-
-$('.{$class}-delete').unbind('click').click(function() {
-
-    swal({
-      title: "$deleteConfirm",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#DD6B55",
-      confirmButtonText: "$confirm",
-      closeOnConfirm: false,
-      cancelButtonText: "$cancel"
-    },
-    function(){
-        $.ajax({
-            method: 'post',
-            url: '{$this->getDeletePath()}',
-            data: {
-                _method:'delete',
-                _token:LA.token,
-            },
-            success: function (data) {
-                $.pjax({container:'#pjax-container', url: '{$this->getListPath()}' });
-
-                if (typeof data === 'object') {
-                    if (data.status) {
-                        swal(data.message, '', 'success');
-                    } else {
-                        swal(data.message, '', 'error');
-                    }
-                }
-            }
-        });
-    });
-});
-
-SCRIPT;
-
-        $delete = trans('admin.delete');
-
-        Admin::script($script);
-
-        return <<<HTML
-<div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="javascript:void(0);" class="btn btn-sm btn-danger {$class}-delete">
-        <i class="fa fa-trash"></i>  {$delete}
-    </a>
-</div>
-HTML;
+        return view('admin::actions.delete', [
+            'label'     => true,
+            'urlDelete' => $this->getDeletePath(),
+            'urlList'   => $this->getListPath(),
+            'callback' => 'list'
+        ])->render();
     }
 
     /**
@@ -297,7 +240,7 @@ HTML;
                 return $tool->toHtml();
             }
 
-            return (string) $tool;
+            return (string)$tool;
         })->implode(' ');
     }
 
@@ -308,13 +251,15 @@ HTML;
      */
     public function render()
     {
-        $output = $this->renderCustomTools($this->prepends);
+        $actions = [$this->renderCustomTools($this->prepends)];
 
         foreach ($this->tools as $tool) {
-            $renderMethod = 'render'.ucfirst($tool);
-            $output .= $this->$renderMethod();
+            $method = 'render' . ucfirst($tool);
+            array_push($actions, $this->$method());
         }
 
-        return $output.$this->renderCustomTools($this->appends);
+        return view('admin::actions.container', [
+            'actions' => $actions
+        ])->render();
     }
 }

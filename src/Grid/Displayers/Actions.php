@@ -150,6 +150,7 @@ class Actions extends AbstractDisplayer
     protected function renderView()
     {
         return view('admin::actions.view', [
+            'label' => false,
             'href' => $this->getResource() . '/' . $this->getKey()
         ])->render();
     }
@@ -162,6 +163,7 @@ class Actions extends AbstractDisplayer
     protected function renderEdit()
     {
         return view('admin::actions.edit', [
+            'label' => false,
             'href' => $this->getResource() . '/' . $this->getKey() . '/edit'
         ])->render();
     }
@@ -174,7 +176,9 @@ class Actions extends AbstractDisplayer
     protected function renderDelete()
     {
         return view('admin::actions.delete', [
-            'url' => $this->getResource() . '/' . $this->getKey(),
+            'label' => false,
+            'urlDelete' => $this->getResource() . '/' . $this->getKey(),
+            'callback' => 'reload'
         ])->render();
     }
 }

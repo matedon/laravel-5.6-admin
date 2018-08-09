@@ -45,39 +45,3 @@
     </div>
     <!-- /.box-body -->
 </div>
-
-<script>
-  $('[data-event="row-delete"]').off('click').on('click', function () {
-    var url = $(this).data('url');
-    swal({
-        title: "{{ trans('admin.delete_confirm') }}",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "{{ trans('admin.confirm') }}",
-        closeOnConfirm: false,
-        cancelButtonText: "{{ trans('admin.cancel') }}"
-      },
-      function () {
-        $.ajax({
-          method: 'post',
-          url: url,
-          data: {
-            _method: 'delete',
-            _token: LA.token,
-          },
-          success: function (data) {
-            $.pjax.reload('#pjax-container');
-
-            if (typeof data === 'object') {
-              if (data.status) {
-                swal(data.message, '', 'success');
-              } else {
-                swal(data.message, '', 'error');
-              }
-            }
-          }
-        });
-      });
-  });
-</script>

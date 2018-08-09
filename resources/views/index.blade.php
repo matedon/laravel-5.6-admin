@@ -60,6 +60,11 @@
 <script>
     function LA() {}
     LA.token = "{{ csrf_token() }}";
+    LA.trans = {
+      delete_confirm: '{{ trans('admin.delete_confirm') }}',
+      confirm: '{{ trans('admin.confirm') }}',
+      cancel: '{{ trans('admin.cancel') }}',
+    }
 </script>
 
 <!-- REQUIRED JS SCRIPTS -->
