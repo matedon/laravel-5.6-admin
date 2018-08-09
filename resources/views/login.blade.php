@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="{{ admin_asset("/vendor/laravel-admin/AdminLTE/dist/css/AdminLTE.min.css") }}">
   <!-- iCheck -->
   <link rel="stylesheet" href="{{ admin_asset("/vendor/laravel-admin/AdminLTE/plugins/iCheck/square/blue.css") }}">
+  <!-- Laravel-admin -->
+  <link rel="stylesheet" href="{{ admin_asset("/vendor/laravel-admin/laravel-admin/login.css") }}">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -22,7 +24,8 @@
   <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 </head>
-<body class="hold-transition login-page" @if(config('admin.login_background_image'))style="background: url({{config('admin.login_background_image')}}) no-repeat;background-size: cover;"@endif>
+<body class="hold-transition login-page"
+      @if(config('admin.login_background_image'))style="background-image: url({{config('admin.login_background_image')}});"@endif>
 <div class="login-box">
   <div class="login-logo">
     <a href="{{ admin_base_path('/') }}"><b>{{config('admin.name')}}</b></a>
@@ -57,7 +60,7 @@
       <div class="row">
 
         <!-- /.col -->
-        <div class="col-xs-4 col-md-offset-4">
+        <div class="col-xs-6 col-md-offset-3">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <button type="submit" class="btn btn-primary btn-block btn-flat">{{ trans('admin.login') }}</button>
         </div>
