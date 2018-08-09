@@ -37,6 +37,13 @@ class Grid
     protected $model;
 
     /**
+     * The classname of the model instance.
+     *
+     * @var string
+     */
+    protected $modelName;
+
+    /**
      * Collection of all grid columns.
      *
      * @var \Illuminate\Support\Collection
@@ -184,6 +191,7 @@ class Grid
     {
         $this->keyName = $model->getKeyName();
         $this->model = new Model($model);
+        $this->modelName = get_class($model);
         $this->columns = new Collection();
         $this->rows = new Collection();
         $this->builder = $builder;
@@ -330,6 +338,7 @@ class Grid
      */
     protected function addColumn($column = '', $label = '')
     {
+        $label = admin_translate($this->modelName, $column, $label);
         $column = new Column($column, $label);
         $column->setGrid($this);
 

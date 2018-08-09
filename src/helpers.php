@@ -104,3 +104,63 @@ if (!function_exists('array_delete')) {
         }
     }
 }
+
+if (!function_exists('admin_translate')) {
+
+    /**
+     * Now you can add your own translate files for your project.
+     * The "laravel-admin" will search for the translations in these sequence:
+     * A.) admin.modelName.columnName
+     * B.) admin.columnName
+     * C.) Column name with spaces (dots and underscore replaced with spaces)
+     * D.) Fallback
+     * If you have translation A, that will be used, if not then B.
+     * If there is no translation at all:
+     * if exists the fallback D else the C will be the output.
+     *
+     * @param $modelPath
+     * @param $column
+     * @param null $fallback
+     * @return string
+     */
+    function admin_translate($modelPath, $column, $fallback = null)
+    {
+        $nameList = explode('\\', $modelPath);
+        /*
+         * CamelCase model name converted to underscore name version.
+         * ExampleString => example_strinig
+         */
+        $modelName = ltrim(strtolower(preg_replace('/[A-Z]([A-Z](?![a-z]))*/', '_$0', end($nameList))), '_');
+        /*
+         * ExampleString with banana => example_string_with_banana
+         */
+        $columnLower = ltrim(strtolower(preg_replace('/[A-Z ]([A-Z](?![a-z]))*/', '_$0', $column)), '_');
+        /*
+         * example_  string _with_banana => example_string_with_banana
+         */
+        $columnLower = preg_replace('!\s+!', '', $columnLower);
+        /*
+         * example__sring_____with_banana => example_string_with_banana
+         */
+        $columnLower = preg_replace('!_+!', '_', $columnLower);
+        /*
+         * The possible translate keys in priority order.
+         */
+        $transLateKeys = [
+            'admin.' . $modelName . '.' . $columnLower,
+            'admin.' . $columnLower,
+            'validation.attributes.' . $columnLower,
+        ];
+        $label = null;
+        foreach ($transLateKeys as $key) {
+            if (Lang::has($key)) {
+                $label = trans($key);
+                break;
+            }
+        }
+        if (!$label) {
+            $label = str_replace(['.', '_'], ' ', $fallback ? $fallback : ucfirst($column));
+        }
+        return (string)$label;
+    }
+}
