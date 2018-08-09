@@ -49,6 +49,16 @@ class Tools implements Renderable
      */
     public function __construct(Panel $panel)
     {
+        if (!config('admin.actions.list')) {
+            $this->disableList();
+        }
+        if (!config('admin.actions.edit')) {
+            $this->disableEdit();
+        }
+        if (!config('admin.actions.delete')) {
+            $this->disableDelete();
+        }
+
         $this->panel = $panel;
 
         $this->appends = new Collection();

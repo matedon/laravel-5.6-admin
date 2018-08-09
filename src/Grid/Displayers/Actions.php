@@ -3,6 +3,8 @@
 namespace Encore\Admin\Grid\Displayers;
 
 use Encore\Admin\Admin;
+use Encore\Admin\Grid;
+use Encore\Admin\Grid\Column;
 
 class Actions extends AbstractDisplayer
 {
@@ -27,6 +29,20 @@ class Actions extends AbstractDisplayer
      * @var string
      */
     protected $resource;
+
+    public function __construct($value, Grid $grid, Column $column, $row)
+    {
+        if (!config('admin.actions.show')) {
+            $this->disableView();
+        }
+        if (!config('admin.actions.edit')) {
+            $this->disableEdit();
+        }
+        if (!config('admin.actions.delete')) {
+            $this->disableDelete();
+        }
+        parent::__construct($value, $grid, $column, $row);
+    }
 
     /**
      * Append a action.

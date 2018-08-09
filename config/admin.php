@@ -194,6 +194,16 @@ return [
     ],
 
     /*
+     | Enable or disable action buttons in Grid, List, Edit or Show views.
+     */
+    'actions' => [
+        'show' => true,
+        'edit' => true,
+        'list' => true,
+        'delete' => true,
+    ],
+
+    /*
     |--------------------------------------------------------------------------
     | Application Skin
     |--------------------------------------------------------------------------

@@ -42,6 +42,15 @@ class Tools implements Renderable
      */
     public function __construct(Builder $builder)
     {
+        if (!config('admin.actions.show')) {
+            $this->disableView();
+        }
+        if (!config('admin.actions.list')) {
+            $this->disableList();
+        }
+        if (!config('admin.actions.delete')) {
+            $this->disableDelete();
+        }
         $this->form = $builder;
     }
 
