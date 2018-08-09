@@ -182,6 +182,28 @@ class Field implements Renderable
     ];
 
     /**
+     * Variable to store JavaScript dataset.
+     * jQuery.data();
+     *
+     * @var array
+     */
+    protected $dataSet = [];
+
+    /**
+     * If you want to prepend any kind of content before the input.
+     * For example bootstrap's input-group-addon
+     * @var
+     */
+    protected $prepend;
+
+    /**
+     * If you want to prepend any kind of content after the input.
+     * For example bootstrap's input-group-addon
+     * @var
+     */
+    protected $append;
+
+    /**
      * Wether you set an icon for the prepended content.
      * @var string
      */
@@ -215,6 +237,24 @@ class Field implements Renderable
         $this->column = $column;
         $this->label = $this->formatLabel($arguments, $modelName);
         $this->id = $this->formatId($column);
+    }
+
+    public function prepend($string)
+    {
+        if (is_null($this->prepend)) {
+            $this->prepend = $string;
+        }
+
+        return $this;
+    }
+
+    public function append($string)
+    {
+        if (is_null($this->append)) {
+            $this->append = $string;
+        }
+
+        return $this;
     }
 
     public function icon($icon)
@@ -265,6 +305,35 @@ class Field implements Renderable
         }
 
         return admin_translate($modelName, $column);
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataSet()
+    {
+        return $this->dataSet;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataSetJson()
+    {
+        return json_encode($this->dataSet);
+    }
+
+    /**
+     * @param array $dataSet
+     */
+    public function setDataSet($dataSet)
+    {
+        $this->dataSet = $dataSet;
+    }
+
+    public function extendDataSet($dataSet)
+    {
+        $this->dataSet = array_extend($this->dataSet, $dataSet);
     }
 
     /**
@@ -936,6 +1005,7 @@ class Field implements Renderable
             'errorKey'    => $this->getErrorKey(),
             'attributes'  => $this->formatAttributes(),
             'placeholder' => $this->getPlaceholder(),
+            'dataSet'     => $this->getDataSetJson(),
         ]);
     }
 

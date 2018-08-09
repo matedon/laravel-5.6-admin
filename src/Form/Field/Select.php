@@ -23,6 +23,8 @@ class Select extends Field
         '/vendor/laravel-admin/AdminLTE/plugins/select2/select2.full.min.js',
     ];
 
+    protected $icon = 'fa-level-down';
+
     /**
      * @var array
      */
@@ -54,7 +56,7 @@ class Select extends Field
         if (is_callable($options)) {
             $this->options = $options;
         } else {
-            $this->options = (array) $options;
+            $this->options = (array)$options;
         }
 
         return $this;
@@ -186,15 +188,15 @@ EOT;
      * Load options from remote.
      *
      * @param string $url
-     * @param array  $parameters
-     * @param array  $options
+     * @param array $parameters
+     * @param array $options
      *
      * @return $this
      */
     protected function loadRemoteOptions($url, $parameters = [], $options = [])
     {
         $ajaxOptions = [
-            'url' => $url.'?'.http_build_query($parameters),
+            'url' => $url . '?' . http_build_query($parameters),
         ];
 
         $ajaxOptions = json_encode(array_merge($ajaxOptions, $options));
@@ -267,7 +269,7 @@ EOT;
      * all configurations see https://select2.org/configuration/options-api
      *
      * @param string $key
-     * @param mixed  $val
+     * @param mixed $val
      *
      * @return $this
      */
@@ -304,7 +306,13 @@ EOT;
 
         $this->options = array_filter($this->options);
 
+        if ($this->icon) {
+            $this->prepend('<i class="fa fa-lg fa-fw ' . $this->icon . '"></i>');
+        }
+
         $this->addVariables([
+            'prepend' => $this->prepend,
+            'append'  => $this->append,
             'options' => $this->options,
             'groups'  => $this->groups,
         ]);
