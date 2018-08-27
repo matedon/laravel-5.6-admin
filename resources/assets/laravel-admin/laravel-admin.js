@@ -47,24 +47,48 @@ $(document).on("pjax:popstate", function () {
   });
 });
 
-$(document).on('pjax:send', function (xhr) {
+var filterFormEmtpyCheck = function () {
+  $('[data-block="filter-form"]').each(function () {
+    var $form = $(this)
+    var notEmpty = false
+    $form.find(':input').each(function () {
+      notEmpty = notEmpty || Boolean($(this).val())
+    })
+    if (notEmpty) {
+      if ($form.hasClass('hide')) {
+        $form.find('[data-element="filter-form__search"]').trigger('click')
+      }
+      $form.removeClass('hide')
+    } else {
+      $form.addClass('hide')
+    }
+  })
+}
+
+var pjaxSendComplete = function (xhr, button) {
   if (xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
-    $submit_btn = $('form[pjax-container] :submit');
-    if ($submit_btn) {
-      $submit_btn.button('loading')
+    var $submitBtn = $('form[pjax-container] :submit');
+    if ($submitBtn) {
+      $submitBtn.button(button)
     }
   }
-  NProgress.start();
-});
+  switch (button) {
+    case 'loading':
+      NProgress.start();
+      break;
+    case 'reset':
+      NProgress.done();
+      filterFormEmtpyCheck();
+      break;
+  }
+}
+
+$(document).on('pjax:send', function (xhr) {
+  pjaxSendComplete(xhr, 'loading')
+})
 
 $(document).on('pjax:complete', function (xhr) {
-  if (xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
-    $submit_btn = $('form[pjax-container] :submit');
-    if ($submit_btn) {
-      $submit_btn.button('reset')
-    }
-  }
-  NProgress.done();
+  pjaxSendComplete(xhr, 'reset')
 });
 
 (function ($) {
@@ -104,7 +128,7 @@ $(document).on('pjax:complete', function (xhr) {
                 $.pjax.reload('#pjax-container');
                 break;
               case 'list':
-                $.pjax({container:'#pjax-container', url: data.urlList });
+                $.pjax({container: '#pjax-container', url: data.urlList});
                 break;
             }
 
@@ -118,6 +142,10 @@ $(document).on('pjax:complete', function (xhr) {
           }
         });
       });
+  });
+
+  $().ready(function () {
+    filterFormEmtpyCheck();
   });
 
 })(jQuery);

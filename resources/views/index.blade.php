@@ -65,6 +65,9 @@
       confirm: '{{ trans('admin.confirm') }}',
       cancel: '{{ trans('admin.cancel') }}',
     }
+    LA.forms = {
+      filters: []
+    }
 </script>
 
 <!-- REQUIRED JS SCRIPTS -->
