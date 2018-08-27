@@ -72,6 +72,7 @@ return [
     'pagination'            => [
         'range' => 'Látható: :first - :last Összesen: :total',
     ],
+    'users'                 => 'Felhasználók',
     'role'                  => 'Szerep',
     'permission'            => 'Jogosultság',
     'route'                 => 'Útvonal',
