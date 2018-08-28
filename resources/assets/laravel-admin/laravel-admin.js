@@ -1,51 +1,55 @@
+/**
+ * Formatted with following standard: https://standardjs.com/
+ */
+
 $.fn.editable.defaults.params = function (params) {
-  params._token = LA.token;
-  params._editable = 1;
-  params._method = 'PUT';
-  return params;
-};
+  params._token = LA.token
+  params._editable = 1
+  params._method = 'PUT'
+  return params
+}
 
 $.fn.editable.defaults.error = function (data) {
-  var msg = '';
+  var msg = ''
   if (data.responseJSON.errors) {
     $.each(data.responseJSON.errors, function (k, v) {
-      msg += v + "\n";
-    });
+      msg += v + "\n"
+    })
   }
   return msg
-};
+}
 
 toastr.options = {
   closeButton: true,
   progressBar: true,
   showMethod: 'slideDown',
   timeOut: 4000
-};
+}
 
-$.pjax.defaults.timeout = 5000;
-$.pjax.defaults.maxCacheLength = 0;
+$.pjax.defaults.timeout = 5000
+$.pjax.defaults.maxCacheLength = 0
 $(document).pjax('a:not(a[target="_blank"])', {
   container: '#pjax-container'
-});
+})
 
-NProgress.configure({parent: '#pjax-container'});
+NProgress.configure({parent: '#pjax-container'})
 
 $(document).on('pjax:timeout', function (event) {
-  event.preventDefault();
+  event.preventDefault()
 })
 
 $(document).on('submit', 'form[pjax-container]', function (event) {
   $.pjax.submit(event, '#pjax-container')
-});
+})
 
 $(document).on("pjax:popstate", function () {
 
   $(document).one("pjax:end", function (event) {
     $(event.target).find("script[data-exec-on-popstate]").each(function () {
-      $.globalEval(this.text || this.textContent || this.innerHTML || '');
-    });
-  });
-});
+      $.globalEval(this.text || this.textContent || this.innerHTML || '')
+    })
+  })
+})
 
 var filterFormEmtpyCheck = function () {
   $('[data-block="filter-form"]').each(function () {
@@ -65,21 +69,34 @@ var filterFormEmtpyCheck = function () {
   })
 }
 
+var pjaxTitleRewrite = function () {
+  var $title = $('head').find('title')
+  var titleRoot = $title.data('titleRoot')
+  var $titlePart = $('[data-element="title-part"]')
+  var titlePartMain = $titlePart.filter('[data-level="main"]').text().trim()
+  var titlePartBracket = $titlePart.filter('[data-level="bracket"]').text().trim()
+  titlePartBracket = titlePartBracket.length ? ' (' + titlePartBracket + ')' : ''
+  var newTitle = titleRoot + ' / ' + titlePartMain + titlePartBracket
+  $title.html(newTitle)
+}
+pjaxTitleRewrite()
+
 var pjaxSendComplete = function (xhr, button) {
   if (xhr.relatedTarget && xhr.relatedTarget.tagName && xhr.relatedTarget.tagName.toLowerCase() === 'form') {
-    var $submitBtn = $('form[pjax-container] :submit');
+    var $submitBtn = $('form[pjax-container] :submit')
     if ($submitBtn) {
       $submitBtn.button(button)
     }
   }
   switch (button) {
     case 'loading':
-      NProgress.start();
-      break;
+      NProgress.start()
+      break
     case 'reset':
-      NProgress.done();
-      filterFormEmtpyCheck();
-      break;
+      NProgress.done()
+      filterFormEmtpyCheck()
+      pjaxTitleRewrite()
+      break
   }
 }
 
@@ -89,22 +106,22 @@ $(document).on('pjax:send', function (xhr) {
 
 $(document).on('pjax:complete', function (xhr) {
   pjaxSendComplete(xhr, 'reset')
-});
+})
 
-(function ($) {
+;(function ($) {
   $('.sidebar-menu li:not(.treeview) > a').on('click', function () {
-    var $parent = $(this).parent().addClass('active');
-    $parent.siblings('.treeview.active').find('> a').trigger('click');
-    $parent.siblings().removeClass('active').find('li').removeClass('active');
-  });
+    var $parent = $(this).parent().addClass('active')
+    $parent.siblings('.treeview.active').find('> a').trigger('click')
+    $parent.siblings().removeClass('active').find('li').removeClass('active')
+  })
 
-  $('[data-toggle="popover"]').popover();
+  $('[data-toggle="popover"]').popover()
 
-  $.fn.admin = LA;
-  $.admin = LA;
+  $.fn.admin = LA
+  $.admin = LA
 
   $('body').on('click', '[data-event="entry-delete"]', function () {
-    var options = $(this).data();
+    var options = $(this).data()
     swal({
         title: LA.trans.delete_confirm,
         type: "warning",
@@ -125,27 +142,27 @@ $(document).on('pjax:complete', function (xhr) {
           success: function (data) {
             switch (options.callback) {
               case 'reload':
-                $.pjax.reload('#pjax-container');
-                break;
+                $.pjax.reload('#pjax-container')
+                break
               case 'list':
-                $.pjax({container: '#pjax-container', url: data.urlList});
-                break;
+                $.pjax({container: '#pjax-container', url: data.urlList})
+                break
             }
 
             if (typeof data === 'object') {
               if (data.status) {
-                swal(data.message, '', 'success');
+                swal(data.message, '', 'success')
               } else {
-                swal(data.message, '', 'error');
+                swal(data.message, '', 'error')
               }
             }
           }
-        });
-      });
-  });
+        })
+      })
+  })
 
   $().ready(function () {
-    filterFormEmtpyCheck();
-  });
+    filterFormEmtpyCheck()
+  })
 
-})(jQuery);
+})(jQuery)
