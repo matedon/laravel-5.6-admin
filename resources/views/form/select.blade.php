@@ -40,5 +40,3 @@
     </div>
   </div>
 </div>
-
-<input type="hidden" name="{{$name}}"/>
