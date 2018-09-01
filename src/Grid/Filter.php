@@ -36,6 +36,13 @@ class Filter implements Renderable
     protected $model;
 
     /**
+     * The classname of the model instance.
+     *
+     * @var string
+     */
+    protected $modelName;
+
+    /**
      * @var array
      */
     protected $filters = [];
@@ -102,8 +109,10 @@ class Filter implements Renderable
     public function __construct(Model $model)
     {
         $this->model = $model;
+        $eloquent = $this->model->eloquent();
+        $this->modelName = get_class($eloquent);
 
-        $pk = $this->model->eloquent()->getKeyName();
+        $pk = $eloquent->getKeyName();
 
         $this->equal($pk, strtoupper($pk));
         $this->scopes = new Collection();
@@ -466,7 +475,12 @@ class Filter implements Renderable
     {
         if (in_array($method, $this->supports)) {
             $className = '\\Encore\\Admin\\Grid\\Filter\\'.ucfirst($method);
-
+            if (count($arguments) == 1) {
+                array_push($arguments, '');
+            }
+            if (count($arguments) == 2) {
+                array_push($arguments, $this->modelName);
+            }
             return $this->addFilter(new $className(...$arguments));
         }
 

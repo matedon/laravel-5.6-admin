@@ -87,10 +87,10 @@ abstract class AbstractFilter
      * @param $column
      * @param string $label
      */
-    public function __construct($column, $label = '')
+    public function __construct($column, $label = '', $modelName = '')
     {
         $this->column = $column;
-        $this->label = $this->formatLabel($label);
+        $this->label = $this->formatLabel($label, $modelName);
         $this->id = $this->formatId($column);
 
         $this->setupDefaultPresenter();
@@ -113,11 +113,10 @@ abstract class AbstractFilter
      *
      * @return string
      */
-    protected function formatLabel($label)
+    protected function formatLabel($label, $modelName = '')
     {
         $label = $label ?: ucfirst($this->column);
-
-        return str_replace(['.', '_'], ' ', $label);
+        return admin_translate($modelName, $label);
     }
 
     /**
