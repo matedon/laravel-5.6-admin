@@ -68,6 +68,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\MultipleFile   multipleFile($column, $label = '')
  * @method Field\Captcha        captcha($column, $label = '')
  * @method Field\Listbox        listbox($column, $label = '')
+ * @method Field\CKEditor       ckeditor($column, $label = '')
  */
 class Form implements Renderable
 {
@@ -1320,6 +1321,7 @@ class Form implements Renderable
             'multipleImage'  => \Encore\Admin\Form\Field\MultipleImage::class,
             'captcha'        => \Encore\Admin\Form\Field\Captcha::class,
             'listbox'        => \Encore\Admin\Form\Field\Listbox::class,
+            'ckeditor'       => \Encore\Admin\Form\Field\CKEditor::class,
         ];
 
         foreach ($map as $abstract => $class) {
