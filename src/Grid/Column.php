@@ -231,6 +231,11 @@ class Column
         return $this->setAttributes(['class' => 'no-print']);
     }
 
+    public function justPrint()
+    {
+        return $this->setAttributes(['class' => 'just-print']);
+    }
+
     /**
      * Format label.
      *
