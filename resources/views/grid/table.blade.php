@@ -22,7 +22,9 @@
         <table class="table table-hover">
             <tr>
                 @foreach($grid->columns() as $column)
-                <th>{{$column->getLabel()}}{!! $column->sorter() !!}</th>
+                <th {!! $grid->rows()->first()->getColumnAttributes($column->getName()) !!}>
+                    {{$column->getLabel()}}{!! $column->sorter() !!}
+                </th>
                 @endforeach
             </tr>
 

@@ -226,6 +226,11 @@ class Column
         return $this->name;
     }
 
+    public function noPrint()
+    {
+        return $this->setAttributes(['class' => 'no-print']);
+    }
+
     /**
      * Format label.
      *
@@ -479,7 +484,7 @@ class Column
 
         $url = URL::current().'?'.http_build_query($query);
 
-        return "<a class=\"fa fa-fw $icon\" href=\"$url\"></a>";
+        return "<a class=\"fa fa-fw no-print $icon\" href=\"$url\"></a>";
     }
 
     /**
