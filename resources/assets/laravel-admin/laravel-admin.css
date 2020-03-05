@@ -17,10 +17,9 @@ a.editable-empty {
 @media print
 {
   page {
-    size: auto;   /* auto is the initial value */
+    size: landscape;   /* auto is the initial value */
     margin: 0;  /* this affects the margin in the printer settings */
   }
-  @page { size: portrait; }
 
   a[href]:after {
     content: none;
@@ -31,5 +30,17 @@ a.editable-empty {
   .no-print, .no-print *
   {
     display: none !important;
+  }
+  
+  .box-header, .box-footer, .main-footer {
+	  display: none !important;
+  }
+  
+  .box {
+	  border: none !important;
+  }
+  
+  .content {
+	  margin: -15px !important;
   }
 }
