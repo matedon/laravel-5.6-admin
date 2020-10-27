@@ -52,7 +52,7 @@ class Image extends AbstractDisplayer
                 $styles [] = "$key:$val";
             }
             if (!empty($styles)) {
-                $style = 'style="' . implode($styles, '; ') . '"';
+                $style = 'style="' . implode('; ', $styles) . '"';
             }
 
             return "<img src='$src' $style class='{$class}' />";
