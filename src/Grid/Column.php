@@ -137,7 +137,7 @@ class Column
      * Define a column globally.
      *
      * @param string $name
-     * @param mixed  $definition
+     * @param mixed $definition
      */
     public static function define($name, $definition)
     {
@@ -236,6 +236,11 @@ class Column
         return $this->setAttributes(['class' => 'just-print']);
     }
 
+    public function width($value)
+    {
+        return $this->setAttributes(['width' => $value]);
+    }
+
     /**
      * Format label.
      *
@@ -283,7 +288,7 @@ class Column
      */
     protected function isRelation()
     {
-        return (bool) $this->relation;
+        return (bool)$this->relation;
     }
 
     /**
@@ -316,7 +321,7 @@ class Column
      * Display column using array value map.
      *
      * @param array $values
-     * @param null  $default
+     * @param null $default
      *
      * @return $this
      */
@@ -345,7 +350,7 @@ class Column
      * Call all of the "display" callbacks column.
      *
      * @param mixed $value
-     * @param int   $key
+     * @param int $key
      *
      * @return mixed
      */
@@ -363,7 +368,7 @@ class Column
      * Set original grid data to column.
      *
      * @param Closure $callback
-     * @param int     $key
+     * @param int $key
      *
      * @return Closure
      */
@@ -485,9 +490,10 @@ class Column
         }
 
         $query = app('request')->all();
-        $query = array_merge($query, [$this->grid->model()->getSortName() => ['column' => $this->name, 'type' => $type]]);
+        $query = array_merge($query,
+            [$this->grid->model()->getSortName() => ['column' => $this->name, 'type' => $type]]);
 
-        $url = URL::current().'?'.http_build_query($query);
+        $url = URL::current() . '?' . http_build_query($query);
 
         return "<a class=\"fa fa-fw no-print $icon\" href=\"$url\"></a>";
     }
@@ -512,7 +518,7 @@ class Column
      * Find a displayer to display column.
      *
      * @param string $abstract
-     * @param array  $arguments
+     * @param array $arguments
      *
      * @return Column
      */
@@ -529,7 +535,7 @@ class Column
      * Call Illuminate/Support displayer.
      *
      * @param string $abstract
-     * @param array  $arguments
+     * @param array $arguments
      *
      * @return Column
      */
@@ -552,7 +558,7 @@ class Column
      * Call Builtin displayer.
      *
      * @param string $abstract
-     * @param array  $arguments
+     * @param array $arguments
      *
      * @return Column
      */
@@ -584,7 +590,7 @@ class Column
      * Allow fluent calls on the Column object.
      *
      * @param string $method
-     * @param array  $arguments
+     * @param array $arguments
      *
      * @return $this
      */
