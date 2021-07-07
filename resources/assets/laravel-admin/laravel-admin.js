@@ -63,7 +63,7 @@ var filterFormEmtpyCheck = function () {
         $form.find('[data-element="filter-form__search"]').trigger('click')
       }
       $form.removeClass('hide')
-    } else {
+    } else if (!$form.data('expand')) {
       $form.addClass('hide')
     }
   })

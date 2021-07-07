@@ -1,5 +1,5 @@
 <div class="box-header with-border {{ $expand ? '' : 'hide' }}" id="{{ $filterID }}"
-     data-block="filter-form">
+     data-block="filter-form" data-expand="{{ $expand ? 'true' : 'false' }}">
   <form action="{!! $action !!}" class="form-horizontal" pjax-container>
     <div class="box-body">
       <div class="fields-group">
