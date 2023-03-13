@@ -4,10 +4,10 @@
   <section class="content-header">
     <h1>
       <span data-element="title-part" data-level="main">
-        {{ $header or trans('admin.title') }}
+        {{ $header ? $header : trans('admin.title') }}
       </span>
       <small data-element="title-part" data-level="bracket">
-        {{ $description or trans('admin.description') }}
+        {{ $description ? $description : trans('admin.description') }}
       </small>
     </h1>
 
