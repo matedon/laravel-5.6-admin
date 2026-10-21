@@ -314,7 +314,8 @@ trait UploadField
      */
     public function destroy()
     {
-        if ($this->storage->exists($this->original)) {
+        // Flysystem 3 rejects a null path; a new record has no original file.
+        if (!empty($this->original) && $this->storage->exists($this->original)) {
             $this->storage->delete($this->original);
         }
     }

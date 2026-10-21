@@ -230,7 +230,7 @@ class Field implements Renderable
                 $url = $server.$path;
             } else {
                 $storage = Storage::disk(config('admin.upload.disk'));
-                if ($storage->exists($path)) {
+                if (!empty($path) && $storage->exists($path)) {
                     $url = $storage->url($path);
                     $size = ($storage->size($path)/1000) . 'KB';
                 }

@@ -232,7 +232,8 @@ EOT;
 
         $file = array_get($files, $key);
 
-        if ($this->storage->exists($file)) {
+        // Flysystem 3 rejects a null path.
+        if (!empty($file) && $this->storage->exists($file)) {
             $this->storage->delete($file);
         }
 
