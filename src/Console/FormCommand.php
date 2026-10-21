@@ -34,48 +34,20 @@ class FormCommand extends Command
             return false;
         }
 
-        // use doctrine/dbal
+        // Laravel 11+ native schema introspection (doctrine/dbal is no longer used)
         $model = $this->laravel->make($modelName);
-        $table = $model->getConnection()->getTablePrefix() . $model->getTable();
-        $schema = $model->getConnection()->getDoctrineSchemaManager($table);
-
-        if (!method_exists($schema, 'getDatabasePlatform')) {
-            $this->error('You need to require doctrine/dbal: ~2.3 in your own composer.json to get database columns. ');
-            $this->info('Using install command: composer require doctrine/dbal');
-            return false;
-
-        }
-
-        // custom mapping the types that doctrine/dbal does not support
-        $databasePlatform = $schema->getDatabasePlatform();
-        $databasePlatform->registerDoctrineTypeMapping('enum', 'string');
-        $databasePlatform->registerDoctrineTypeMapping('geometry', 'string');
-        $databasePlatform->registerDoctrineTypeMapping('geometrycollection', 'string');
-        $databasePlatform->registerDoctrineTypeMapping('linestring', 'string');
-        $databasePlatform->registerDoctrineTypeMapping('multilinestring', 'string');
-        $databasePlatform->registerDoctrineTypeMapping('multipoint', 'string');
-        $databasePlatform->registerDoctrineTypeMapping('multipolygon', 'string');
-        $databasePlatform->registerDoctrineTypeMapping('point', 'string');
-        $databasePlatform->registerDoctrineTypeMapping('polygon', 'string');
-        $databasePlatform->registerDoctrineTypeMapping('multipolygon', 'string');
-        $databasePlatform->registerDoctrineTypeMapping('multipolygon', 'string');
-
-        $database = null;
-        if (strpos($table, '.')) {
-            list($database, $table) = explode('.', $table);
-        }
-        $columns = $schema->listTableColumns($table, $database);
+        $columns = $model->getConnection()->getSchemaBuilder()->getColumns($model->getTable());
 
         $adminForm = '';
         if ($columns) {
             foreach ($columns as $column) {
-                $name = $column->getName();
+                $name = $column['name'];
                 if (in_array($name, ['id', 'created_at', 'deleted_at'])) {
                     continue;
                 }
-                $type = $column->getType()->getName();
-                $comment = $column->getComment();
-                $default = $column->getDefault();
+                $type = $this->normalizeColumnType($column['type_name']);
+                $comment = $column['comment'];
+                $default = $column['default'];
 
                 // set column fieldType and defaultValue
                 switch ($type) {
@@ -162,6 +134,29 @@ class FormCommand extends Command
             $this->info($adminForm);
         }
 
+    }
+
+    /**
+     * Map a native database type name to the type names the generator used with doctrine/dbal.
+     *
+     * @param string $typeName
+     * @return string
+     */
+    private function normalizeColumnType($typeName)
+    {
+        $typeName = strtolower((string) $typeName);
+
+        $map = [
+            'tinyint' => 'boolean',
+            'int' => 'integer', 'mediumint' => 'integer',
+            'varchar' => 'string', 'char' => 'string', 'enum' => 'string', 'set' => 'string',
+            'tinytext' => 'text', 'mediumtext' => 'text', 'longtext' => 'text',
+            'tinyblob' => 'blob', 'mediumblob' => 'blob', 'longblob' => 'blob',
+            'double' => 'float', 'numeric' => 'decimal',
+            'timestamp' => 'datetime',
+        ];
+
+        return $map[$typeName] ?? $typeName;
     }
 
     /**

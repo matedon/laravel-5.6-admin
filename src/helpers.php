@@ -1,5 +1,125 @@
 <?php
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+
+/*
+ * Legacy Laravel 5 array/string helpers, removed from the framework in Laravel 6.
+ * The package and its host applications still call them, so they are kept here
+ * as thin wrappers around Arr/Str (same behaviour as the laravel/helpers package).
+ */
+if (!function_exists('array_get')) {
+    function array_get($array, $key, $default = null)
+    {
+        return Arr::get($array, $key, $default);
+    }
+}
+
+if (!function_exists('array_set')) {
+    function array_set(&$array, $key, $value)
+    {
+        return Arr::set($array, $key, $value);
+    }
+}
+
+if (!function_exists('array_has')) {
+    function array_has($array, $keys)
+    {
+        return Arr::has($array, $keys);
+    }
+}
+
+if (!function_exists('array_forget')) {
+    function array_forget(&$array, $keys)
+    {
+        Arr::forget($array, $keys);
+    }
+}
+
+if (!function_exists('array_dot')) {
+    function array_dot($array, $prepend = '')
+    {
+        return Arr::dot($array, $prepend);
+    }
+}
+
+if (!function_exists('array_only')) {
+    function array_only($array, $keys)
+    {
+        return Arr::only($array, $keys);
+    }
+}
+
+if (!function_exists('array_except')) {
+    function array_except($array, $keys)
+    {
+        return Arr::except($array, $keys);
+    }
+}
+
+if (!function_exists('array_flatten')) {
+    function array_flatten($array, $depth = INF)
+    {
+        return Arr::flatten($array, $depth);
+    }
+}
+
+if (!function_exists('snake_case')) {
+    function snake_case($value, $delimiter = '_')
+    {
+        return Str::snake($value, $delimiter);
+    }
+}
+
+if (!function_exists('camel_case')) {
+    function camel_case($value)
+    {
+        return Str::camel($value);
+    }
+}
+
+if (!function_exists('studly_case')) {
+    function studly_case($value)
+    {
+        return Str::studly($value);
+    }
+}
+
+if (!function_exists('starts_with')) {
+    function starts_with($haystack, $needles)
+    {
+        return Str::startsWith($haystack, $needles);
+    }
+}
+
+if (!function_exists('ends_with')) {
+    function ends_with($haystack, $needles)
+    {
+        return Str::endsWith($haystack, $needles);
+    }
+}
+
+if (!function_exists('str_slug')) {
+    function str_slug($title, $separator = '-', $language = 'en')
+    {
+        return Str::slug($title, $separator, $language);
+    }
+}
+
+if (!function_exists('str_random')) {
+    function str_random($length = 16)
+    {
+        return Str::random($length);
+    }
+}
+
+if (!function_exists('str_limit')) {
+    function str_limit($value, $limit = 100, $end = '...')
+    {
+        return Str::limit($value, $limit, $end);
+    }
+}
+
 if (!function_exists('admin_path')) {
 
     /**

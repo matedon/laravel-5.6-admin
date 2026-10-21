@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
@@ -323,7 +322,7 @@ class Form implements Renderable
      */
     public function store()
     {
-        $data = Input::all();
+        $data = request()->all();
 
         // Handle validation errors.
         if ($validationMessages = $this->validationMessages($data)) {
@@ -488,7 +487,7 @@ class Form implements Renderable
      */
     public function update($id, $data = null)
     {
-        $data = ($data) ?: Input::all();
+        $data = ($data) ?: request()->all();
 
         $isEditable = $this->isEditable($data);
 
@@ -640,7 +639,7 @@ class Form implements Renderable
             unset($input['key']);
         }
 
-        Input::replace($input);
+        request()->replace($input);
 
         return $input;
     }

@@ -3,6 +3,7 @@
 namespace Encore\Admin\Auth\Database;
 
 use Encore\Admin\Traits\AdminBuilder;
+use Encore\Admin\Traits\DefaultDatetimeFormat;
 use Encore\Admin\Traits\ModelTree;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\DB;
  */
 class Menu extends Model
 {
-    use AdminBuilder, ModelTree {
+    use AdminBuilder, DefaultDatetimeFormat, ModelTree {
         ModelTree::boot as treeBoot;
     }
 

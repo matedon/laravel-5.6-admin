@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
 
 class Model
@@ -452,7 +451,7 @@ class Model
      */
     protected function setSort()
     {
-        $this->sort = Input::get($this->sortName, []);
+        $this->sort = request()->input($this->sortName, []);
         if (!is_array($this->sort)) {
             return;
         }
@@ -536,7 +535,7 @@ class Model
         if ($relation instanceof BelongsTo) {
             return [
                 $relatedTable,
-                $relation->getForeignKey(),
+                $relation->getQualifiedForeignKeyName(),
                 '=',
                 $relatedTable.'.'.$relation->getRelated()->getKeyName(),
             ];

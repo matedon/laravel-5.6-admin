@@ -7,7 +7,6 @@ use Encore\Admin\Grid\Filter\Scope;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Input;
 
 /**
  * Class Filter.
@@ -214,7 +213,7 @@ class Filter implements Renderable
      */
     public function conditions()
     {
-        $inputs = array_dot(Input::all());
+        $inputs = array_dot(request()->all());
 
         $inputs = array_filter($inputs, function ($input) {
             return $input !== '' && !is_null($input);

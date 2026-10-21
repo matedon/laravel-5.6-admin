@@ -21,7 +21,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Schema;
 use Jenssegers\Mongodb\Eloquent\Model as MongodbModel;
 
@@ -228,7 +227,7 @@ class Grid
      */
     protected function setupExporter()
     {
-        if ($scope = Input::get(Exporter::$queryName)) {
+        if ($scope = request()->input(Exporter::$queryName)) {
             $this->model()->usePaginate(false);
 
             call_user_func($this->builder, $this);
@@ -678,7 +677,7 @@ class Grid
      */
     public function getExportUrl($scope = 1, $args = null)
     {
-        $input = array_merge(Input::all(), Exporter::formatExportQuery($scope, $args));
+        $input = array_merge(request()->all(), Exporter::formatExportQuery($scope, $args));
 
         if ($constraints = $this->model()->getConstraints()) {
             $input = array_merge($input, $constraints);
